@@ -1,13 +1,23 @@
-import { Button, Heading, HStack, Image, List, Spinner } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  HStack,
+  Image,
+  List,
+  Spinner,
+} from "@chakra-ui/react";
 import useGenres, { type Genre } from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
 
 interface Props {
   onSelectGenre: (genre: Genre) => void;
-  selectedGenre: Genre | null;
+  selectedGenreId?: number;
 }
 
-const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
+const GenreList = ({
+  selectedGenreId,
+  onSelectGenre,
+}: Props) => {
   const { data, isLoading, error } = useGenres();
 
   if (error) return null;
@@ -16,37 +26,37 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   return (
     <>
       <Heading fontSize="2xl" marginBottom={2}>
-      Genres
-    </Heading>
-    <List.Root listStyle="none">
-      {data?.results.map((genre) => (
-        <List.Item key={genre.id} paddingY="5px">
-          <HStack>
-            <Image
-              boxSize="32px"
-              borderRadius="8px"
-              objectFit="cover"
-              src={getCroppedImageUrl(genre.image_background)}
-            />
-            <Button
-              variant="plain"
-              fontSize="sm"
-              _hover={{
-                textDecoration: "underline",
-              }}
-              justifyContent="flex-start"
-              textAlign="left"
-              paddingX="0"
-              whiteSpace="normal"
-              fontWeight={genre.id === selectedGenre?.id ? 'bold' : 'normal'}
-              onClick={() => onSelectGenre(genre)}
-            >
-              {genre.name}
-            </Button>
-          </HStack>
-        </List.Item>
-      ))}
-    </List.Root>
+        Genres
+      </Heading>
+      <List.Root listStyle="none">
+        {data?.results.map((genre) => (
+          <List.Item key={genre.id} paddingY="5px">
+            <HStack>
+              <Image
+                boxSize="32px"
+                borderRadius="8px"
+                objectFit="cover"
+                src={getCroppedImageUrl(genre.image_background)}
+              />
+              <Button
+                variant="plain"
+                fontSize="sm"
+                _hover={{
+                  textDecoration: "underline",
+                }}
+                justifyContent="flex-start"
+                textAlign="left"
+                paddingX="0"
+                whiteSpace="normal"
+                fontWeight={genre.id === selectedGenreId ? "bold" : "normal"}
+                onClick={() => onSelectGenre(genre)}
+              >
+                {genre.name}
+              </Button>
+            </HStack>
+          </List.Item>
+        ))}
+      </List.Root>
     </>
   );
 };
